@@ -1,39 +1,35 @@
-
 "use client";
-import React, { useEffect, useState } from "react";
-import axiosInstance from "@/app/config/axiosInstance";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchDetails, fetchProducts } from "@/stores/products-store";
 import { Card, CardContent, CardMedia, Button, Typography, Box } from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Fullscreen } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { actions } from '@/stores/basket-store'; 
 
 const BookDetail = ({ params }) => {
   const { id } = params;
-  const [book, setBook] = useState(null);
+  const dispatch = useDispatch();
+  const book = useSelector((state) => state.products.products.find((item) => item.id === id));
+ 
 
-  
-  
   useEffect(() => {
-    const fetchBookDetail = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `https://www.googleapis.com/books/v1/volumes/${id}`
-        );
-        setBook(response.data);
-      } catch (error) {
-        console.error("Bir hata oluştu:", error);
-      }
-    };
-
-    if (id) {
-      fetchBookDetail();
+    if (!book) {
+      dispatch(fetchProducts());
     }
-  }, [id]);
+  }, [book, dispatch]);
+
+  const addBasket = () => {
+    console.log("gelen book objesi", book.volumeInfo.title);
+    dispatch(actions.addToBasket(book));
+  };
+  const removeFromBasket = () => {
+    console.log
+    dispatch(basketActions.removeFromBasket(book));
+  };
 
   return (
     <Box
       sx={{
-        
         alignItems: 'center',
         height: '100vh',
         justifyContent: 'center',
@@ -43,8 +39,6 @@ const BookDetail = ({ params }) => {
           : '', 
         backgroundSize: 'cover  ',
         backgroundPosition: 'center',
-        
-        
       }}
     >
       {book && (
@@ -65,8 +59,8 @@ const BookDetail = ({ params }) => {
             <Typography variant="h5" component="h2" gutterBottom>
               {book.volumeInfo.title}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              <div dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }}></div>
+            <Typography variant="body2" color="text.secondary" component="div">
+              <div dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }} />
             </Typography>
             <Box sx={{ marginTop: 2 }}>
               <Button
@@ -75,6 +69,7 @@ const BookDetail = ({ params }) => {
                 size="small"
                 startIcon={<ShoppingCartIcon />}
                 sx={{ color: 'black', bgcolor: '#ffffff' }}
+                onClick={addBasket} 
               >
                 Sepete Ekle
               </Button>
@@ -84,7 +79,7 @@ const BookDetail = ({ params }) => {
       )}
     </Box>
   );
-  
 };
 
 export default BookDetail;
+

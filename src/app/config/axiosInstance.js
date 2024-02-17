@@ -7,7 +7,7 @@ const axiosInstance = axios.create({
         'Content-Type': 'application/json',
     },
     params: {
-        key: 'AIzaSyDZTvhLcqVhDaMvxbZ0Lx_XQsjTGfrpxow', // API anahtarı
+        key: 'AIzaSyCi29Xz-ra5E1jLFNYIZRPPM01oJj740LQ', // API anahtarı
     },
 });
 
