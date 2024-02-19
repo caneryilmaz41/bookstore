@@ -1,4 +1,3 @@
-// İlk sayfa
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 

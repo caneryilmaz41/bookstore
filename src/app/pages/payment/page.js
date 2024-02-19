@@ -326,7 +326,7 @@ const PaymentPage = ({ onNextStep }) => {
             variant="contained"
             style={{ backgroundColor: green[500], color: "white" }}
             type="submit"
-            onClick={onSubmitStep3} // onSubmitStep3 fonksiyonunu buraya ekle
+            onClick={onSubmitStep3} 
           >
             Ödemeyi Tamamla
           </Button>

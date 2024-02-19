@@ -135,7 +135,7 @@ const Home = () => {
                     padding: 1,
                   }}
                 >
-                  <Link href={`books/${book.id}`} passHref>
+                  <Link href={`/pages/books/${book.id}`} passHref>
                     <Button
                       size="small"
                       variant="contained"
