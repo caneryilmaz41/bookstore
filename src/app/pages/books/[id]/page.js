@@ -1,85 +1,134 @@
 "use client";
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchDetails, fetchProducts } from "@/stores/products-store";
-import { Card, CardContent, CardMedia, Button, Typography, Box } from "@mui/material";
+import { fetchProducts } from "@/stores/products-store";
+import {
+  Paper,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  Typography,
+  Box,
+  Grid,
+  Container,
+} from "@mui/material";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { actions } from '@/stores/basket-store'; 
+import { actions } from "@/stores/basket-store";
 
 const BookDetail = ({ params }) => {
   const { id } = params;
   const dispatch = useDispatch();
-  const book = useSelector((state) => state.products.products.find((item) => item.id === id));
- 
+  const book = useSelector((state) =>
+    state.products.products.find((item) => item.id === id)
+  );
 
   useEffect(() => {
     if (!book) {
       dispatch(fetchProducts());
     }
   }, [book, dispatch]);
-
+  const defaultImage =
+    "https://www.dinamikegitim.com/tema/genel/uploads/haberler/kitaplar-696x435.jpg";
   const addBasket = () => {
     console.log("gelen book objesi", book.volumeInfo.title);
     dispatch(actions.addToBasket(book));
   };
-  const removeFromBasket = () => {
-    console.log
-    dispatch(basketActions.removeFromBasket(book));
-  };
 
   return (
-    <Box
-      sx={{
-        alignItems: 'center',
-        height: '100vh',
-        justifyContent: 'center',
-        display: 'flex',
-        backgroundImage: book && book.volumeInfo.imageLinks
-          ? `url(${book.volumeInfo.imageLinks.thumbnail})`
-          : '', 
-        backgroundSize: 'cover  ',
-        backgroundPosition: 'center',
-      }}
-    >
-      {book && (
-        <Card
-          sx={{
-            width: '50%',
-            boxShadow: 'rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px',
-            backgroundColor: 'rgba(255, 255, 255, 0.8)', 
-          }}
-        >
-          <CardMedia
-            component="img"
-            image={book.volumeInfo.imageLinks ? book.volumeInfo.imageLinks.thumbnail : ''}
-            alt={book.volumeInfo.title}
-            sx={{ width: 150, objectFit: 'cover' }}
-          />
-          <CardContent sx={{ flex: 1 }}>
-            <Typography variant="h5" component="h2" gutterBottom>
-              {book.volumeInfo.title}
-            </Typography>
-            <Typography variant="body2" color="text.secondary" component="div">
-              <div dangerouslySetInnerHTML={{ __html: book.volumeInfo.description }} />
-            </Typography>
-            <Box sx={{ marginTop: 2 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                size="small"
-                startIcon={<ShoppingCartIcon />}
-                sx={{ color: 'black', bgcolor: '#ffffff' }}
-                onClick={addBasket} 
-              >
-                Sepete Ekle
-              </Button>
-            </Box>
-          </CardContent>
-        </Card>
-      )}
-    </Box>
+    <Container sx={{ mt: 4, mb: 4, paddingTop: 10 }}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          {book && (
+            <Card sx={{ height: "100%" }}>
+              <CardMedia
+                component="img"
+                height="400"
+                image={
+                  book.volumeInfo.imageLinks
+                    ? book.volumeInfo.imageLinks.thumbnail
+                    : defaultImage
+                }
+                alt={book.volumeInfo.title}
+              />
+            </Card>
+          )}
+        </Grid>
+        <Grid item xs={12} md={8}>
+          {book && (
+            <Card sx={{ height: "100%" }}>
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {book.volumeInfo.title}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  {book.volumeInfo.authors.join(", ")}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  color="text.primary"
+                  component="div"
+                >
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: book.volumeInfo.description,
+                    }}
+                  />
+                </Typography>
+                <Box mt={4}>
+                  <Paper
+                    elevation={10}
+                    sx={{
+                      borderRadius: "15px",
+                      p: 2,
+                      bgcolor: "green",
+                      color: "white",
+                    }}
+                  >
+                    <Typography variant="h6" align="center">
+                      {book.saleInfo &&
+                      book.saleInfo.listPrice &&
+                      book.saleInfo.listPrice.amount
+                        ? `${book.saleInfo.listPrice.amount} ₺`
+                        : "Tükendi"}
+                    </Typography>
+                  </Paper>
+                </Box>
+                {book.saleInfo &&
+                book.saleInfo.listPrice &&
+                book.saleInfo.listPrice.amount ? (
+                  <Box mt={4}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      startIcon={<ShoppingCartIcon />}
+                      sx={{
+                        "&.MuiButton-contained": {
+                          backgroundColor: "green",
+                          color: "white",
+                          "&:hover": {
+                            backgroundColor: "orange",
+                          },
+                        },
+                      }}
+                      onClick={addBasket}
+                    >
+                      Sepete Ekle
+                    </Button>
+                  </Box>
+                ) : null}
+              </CardContent>
+            </Card>
+          )}
+        </Grid>
+      </Grid>
+    </Container>
   );
 };
 
 export default BookDetail;
-

@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
   "details/fetchProducts",
   async () => {
     const response = await fetch(
-      "https://www.googleapis.com/books/v1/volumes?q=%27%27&key=AIzaSyCi29Xz-ra5E1jLFNYIZRPPM01oJj740LQ"
+      "https://www.googleapis.com/books/v1/volumes?q=%27%27&key=AIzaSyCbPkBCBLXfT0GhRW2oUDmCcunADhUOPX4"
       );
     const products = await response.json();
     return products;

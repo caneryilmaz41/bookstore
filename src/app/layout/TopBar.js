@@ -1,11 +1,9 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import Drawer from "@mui/material/Drawer";
 import Badge from "@mui/material/Badge";
@@ -13,6 +11,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useSelector, useDispatch } from "react-redux";
 import { actions } from "@/stores/basket-store";
 import ModernShoppingCart from "../component/ModernShoppingCart";
+import Image from "next/image";
+import Link from "next/link";
 
 export function TopBar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -44,18 +44,24 @@ export function TopBar() {
   return (
     <>
       <AppBar position="fixed">
-        <Toolbar sx={{
-          
-          color:'white',
-              border:'-moz-initial',
-              borderColor:'red',
-          backgroundColor:'#FF8911',
-          
-        }}>
-          
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            KİTAP MERKEZİM
-          </Typography>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            color: "white",
+            backgroundColor: "#FF8911",
+          }}
+        >
+          <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Link href="/pages/home">
+              <Image
+                src="/logo.png"
+                alt="Kitap Merkezim Logo"
+                width={150}
+                height={120}
+              />
+            </Link>
+          </Box>
           <IconButton
             size="large"
             edge="end"
@@ -63,8 +69,8 @@ export function TopBar() {
             aria-label="sepet"
             onClick={toggleDrawer}
           >
-            <Badge  badgeContent={getTotalItemsCount(basket)} color="error">
-              <ShoppingCartIcon  />
+            <Badge badgeContent={getTotalItemsCount(basket)} color="error">
+              <ShoppingCartIcon />
             </Badge>
           </IconButton>
           <Drawer
@@ -73,7 +79,6 @@ export function TopBar() {
             onClose={toggleDrawer}
             sx={{ width: 300 }}
           >
-            {/* ModernShoppingCart bileşenini burada kullanın */}
             <ModernShoppingCart
               isOpen={isDrawerOpen}
               toggleDrawer={toggleDrawer}
